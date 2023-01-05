@@ -39,7 +39,6 @@ jobs:
           # title: Convert file from .ipynb to .md 
           title: Autoformat
           body: This is an auto-generated PR
-          branch: md
           delete-branch: true
           branch: automatic-black-update
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
