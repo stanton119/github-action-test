@@ -16,7 +16,7 @@ dependencies:
   - jupyter
   - pylint
   - rope
-  - black
+  - black[jupyter]
 
   - pyarrow
 
