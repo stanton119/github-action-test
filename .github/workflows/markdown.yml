@@ -29,8 +29,16 @@ jobs:
           cache-dependency-path: '**/requirements-ci.txt'
       - run: pip install -r requirements-ci.txt
         
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'ipynb'
       - name: Convert to markdown
-        run: jupyter nbconvert test-notebook.ipynb --to markdown
+        run: |
+          for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
+            echo ${added_modified_file}
+            jupyter nbconvert ${added_modified_file} --to markdown
+          done
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
