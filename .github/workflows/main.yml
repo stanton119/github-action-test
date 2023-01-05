@@ -32,6 +32,7 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
+        id: new_pull_request
         with:
           commit-message: CI - Autoformat pull request
           committer: Richard Stanton <RichardStanton@users.noreply.github.com>
@@ -39,14 +40,14 @@ jobs:
           title: Autoformat
           body: This is an auto-generated PR
           branch: md
+          delete-branch: true
+          branch: automatic-black-update
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-      # - uses: peter-evans/create-pull-request@v3.10.0
-      #   id: new_pull_request
+      - if: steps.new_pull_request.outputs.pull-request-url != ''
+        run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
+
+      # - uses: peter-evans/enable-pull-request-automerge@v2
       #   with:
-      #     delete-branch: true
-      #     title: automatic black update
-      #     commit-message: automatic black update
-      #     branch: automatic-black-update
-      #     token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      # - if: steps.new_pull_request.outputs.pull-request-url != ''
-      #   run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
+      #     token: ${{ secrets.PAT }}
+      #     pull-request-number: 1
