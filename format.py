@@ -1,4 +1,4 @@
 import pandas as pd
 
 if True:
-    val =   2
+    val = 2
