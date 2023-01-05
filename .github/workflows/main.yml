@@ -16,17 +16,38 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+          cache: 'pip' # caching pip dependencies
+      
+      - name: install dependencies
+        run: pip install -r requirements-ci.txt
+        
+      - name: Auto format
+        run: black .
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: CI - Autoformat pull request
+          committer: Richard Stanton <RichardStanton@users.noreply.github.com>
+          # title: Convert file from .ipynb to .md 
+          title: Autoformat
+          body: This is an auto-generated PR
+          branch: md
+
+      # - uses: peter-evans/create-pull-request@v3.10.0
+      #   id: new_pull_request
+      #   with:
+      #     delete-branch: true
+      #     title: automatic black update
+      #     commit-message: automatic black update
+      #     branch: automatic-black-update
+      #     token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      # - if: steps.new_pull_request.outputs.pull-request-url != ''
+      #   run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
