@@ -8,4 +8,4 @@ Run black
 re-commit
 limit to trigger only on publish folder and ipynb updates
 
-`jupyter nbconvert notebook.ipynb --to markdown`
+`jupyter nbconvert test-notebook.ipynb --to markdown`
