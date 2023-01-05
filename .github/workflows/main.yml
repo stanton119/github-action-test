@@ -30,23 +30,35 @@ jobs:
       - name: Auto format
         run: black .
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        id: new_pull_request
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
         with:
-          commit-message: CI - Autoformat pull request
-          committer: Richard Stanton <RichardStanton@users.noreply.github.com>
-          # title: Convert file from .ipynb to .md 
-          title: Autoformat
-          body: This is an auto-generated PR
-          delete-branch: true
-          branch: automatic-black-update
-          # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          # author_name: Your Name
+          # author_email: mail@example.com
+          message: 'This is an auto-generated PR'
+          add: ['*.js','*.ipynb']
 
-      - if: steps.new_pull_request.outputs.pull-request-url != ''
-        run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
-        env:
-          GH_TOKEN: ${{ github.token }}
+
+
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v4
+      #   id: new_pull_request
+      #   with:
+      #     commit-message: CI - Autoformat pull request
+      #     committer: Richard Stanton <RichardStanton@users.noreply.github.com>
+      #     # title: Convert file from .ipynb to .md 
+      #     title: Autoformat
+      #     body: This is an auto-generated PR
+      #     delete-branch: true
+      #     branch: automatic-black-update
+      #     # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      # - if: steps.new_pull_request.outputs.pull-request-url != ''
+      #   run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
 
       # - uses: peter-evans/enable-pull-request-automerge@v2
       #   with:
