@@ -41,7 +41,7 @@ jobs:
           body: This is an auto-generated PR
           delete-branch: true
           branch: automatic-black-update
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       - if: steps.new_pull_request.outputs.pull-request-url != ''
         run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
