@@ -1,0 +1,55 @@
+name: Jupyter to markdown
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+    paths:
+      - '**.ipynb'
+      - '**/**.ipynb'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  markdown:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: '**/requirements-ci.txt'
+      - run: pip install -r requirements-ci.txt
+        
+      - name: Convert to markdown
+        run: jupyter nbconvert test-notebook.ipynb --to markdown
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        id: new_pull_request
+        with:
+          commit-message: CI - markdown conversion pull request
+          committer: Richard Stanton <RichardStanton@users.noreply.github.com>
+          # title: Convert file from .ipynb to .md 
+          title: Markdown Conversion
+          body: This is an auto-generated PR
+          delete-branch: true
+          branch: markdown
+          base: publish
+          # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      # - if: steps.new_pull_request.outputs.pull-request-url != ''
+      #   run: gh pr merge --auto --squash ${{ steps.new_pull_request.outputs.pull-request-url }}
+
+      # - uses: peter-evans/enable-pull-request-automerge@v2
+      #   with:
+      #     token: ${{ secrets.PAT }}
+      #     pull-request-number: 1
