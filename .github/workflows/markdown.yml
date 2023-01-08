@@ -29,15 +29,12 @@ jobs:
           cache-dependency-path: '**/requirements-ci.txt'
       - run: pip install -r requirements-ci.txt
         
-      - id: files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'ipynb'
       - name: Convert to markdown
         run: |
-          for added_modified_file in ${{ steps.files.outputs.added_modified }}; do
-            echo ${added_modified_file}
-            jupyter nbconvert ${added_modified_file} --to markdown
+          files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ipynb)
+          for i in $files;
+          do
+            jupyter nbconvert --to markdown $i
           done
 
       - name: Create Pull Request
