@@ -46,28 +46,29 @@ jobs:
         
       - name: Convert to markdown
         run: ./convert_to_markdown.sh ${{ github.event.before }} ${{ github.event.after }}
-        # run: |
-        #   files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ipynb)
-        #   for i in $files;
-        #   do
-        #     jupyter nbconvert --to markdown $i
-        #   done
-
-
-        # run: ./convert_to_markdown.sh
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        id: new_pull_request
+        
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
         with:
-          commit-message: CI - markdown conversion pull request
-          committer: Richard Stanton <RichardStanton@users.noreply.github.com>
-          # title: Convert file from .ipynb to .md 
-          title: Markdown Conversion
-          body: This is an auto-generated PR
-          delete-branch: true
-          branch: markdown
-          base: publish
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          # author_name: Your Name
+          # author_email: mail@example.com
+          message: 'CI - markdown conversion'
+          add: "*"
+
+      # - name: Create Pull Request
+      #   uses: peter-evans/create-pull-request@v4
+      #   id: new_pull_request
+      #   with:
+      #     commit-message: CI - markdown conversion pull request
+      #     committer: Richard Stanton <RichardStanton@users.noreply.github.com>
+      #     # title: Convert file from .ipynb to .md 
+      #     title: Markdown Conversion
+      #     body: This is an auto-generated PR
+      #     delete-branch: true
+      #     branch: markdown
+      #     base: publish
           # token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       # - if: steps.new_pull_request.outputs.pull-request-url != ''
