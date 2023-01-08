@@ -29,6 +29,17 @@ jobs:
           cache-dependency-path: '**/requirements-ci.txt'
       - run: pip install -r requirements-ci.txt
         
+      - name: Print SHAs
+        run: |
+          echo "context.payload.pull_request?.base?.sha"
+          echo "$(context.payload.pull_request?.base?.sha)"
+          echo "context.payload.pull_request?.head?.sha"
+          echo "$(context.payload.pull_request?.head?.sha)"
+          echo "context.payload.before"
+          echo "$(context.payload.before)"
+          echo "context.payload.after"
+          echo "$(context.payload.after)"
+        
       - name: Convert to markdown
         run: ./convert_to_markdown.sh ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
         # run: |
