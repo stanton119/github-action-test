@@ -3,11 +3,16 @@
 echo $1
 echo $2
 
-files=$(git diff --name-only --diff-filter=ACMRT $1 $2 | grep .ipynb)
+# files=$(git diff --name-only --diff-filter=ACMRT $1 $2 | grep .ipynb)
+# ignore deleted files, filter for .ipynb only
+files=$(git diff --name-only --diff-filter=d $1 $2 | grep .ipynb)
+# files=$(git diff --name-only --diff-filter=d $1 $2)
+# files=$(git diff --name-only --diff-filter=ACMRT $1 $2)
 # files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ipynb)
 for i in $files;
 do
-   jupyter nbconvert --to markdown $i
+   echo $i
+   # jupyter nbconvert --to markdown $i
 done
 
 
