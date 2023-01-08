@@ -43,7 +43,7 @@ jobs:
           echo "${{ github.sha }}"
         
       - name: Convert to markdown
-        run: ./convert_to_markdown.sh ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
+        run: ./convert_to_markdown.sh ${{ github.event.before }} ${{ github.event.after }}
         # run: |
         #   files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ipynb)
         #   for i in $files;
