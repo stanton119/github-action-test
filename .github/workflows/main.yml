@@ -1,4 +1,4 @@
-name: Autoformat
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -47,6 +47,7 @@ jobs:
 
   ConvertMarkdown:
     # The type of runner that the job will run on
+    needs: job1
     runs-on: ubuntu-latest
 
     steps:
